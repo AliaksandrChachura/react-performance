@@ -4,4 +4,4 @@
 echo "✅ Running pre-push hook"
 npm run lint
 echo "🧪 Running tests..."
-npm run test
+npm run test:check
