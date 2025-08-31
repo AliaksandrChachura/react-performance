@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../store';
-import { useState, Fragment } from 'react';
+import { useState, Fragment, useCallback } from 'react';
 import { getColumnValue } from '../../helpers';
 import YearlyDataTable from './YearlyDataTable';
 
@@ -24,7 +24,7 @@ function AsyncCountriesTable({
     throw new Promise(() => {});
   }
 
-  const toggleCountry = (country: string) => {
+  const toggleCountry = useCallback((country: string) => {
     setExpandedCountries((prev) => {
       const newExpanded = new Set(prev);
       if (newExpanded.has(country)) {
@@ -34,7 +34,14 @@ function AsyncCountriesTable({
       }
       return newExpanded;
     });
-  };
+  }, []);
+
+  const createCountryClickHandler = useCallback(
+    (country: string) => {
+      return () => toggleCountry(country);
+    },
+    [toggleCountry]
+  );
 
   const renderCountries = () => {
     return processedCountries.map((country) => {
@@ -68,7 +75,7 @@ function AsyncCountriesTable({
               backgroundColor: isHighlighted ? '#fef3c7' : undefined,
               transition: 'background-color 0.3s ease',
             }}
-            onClick={() => toggleCountry(country)}
+            onClick={createCountryClickHandler(country)}
           >
             {selectedColumns.map((columnKey) => (
               <td

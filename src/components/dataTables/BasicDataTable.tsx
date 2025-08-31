@@ -39,22 +39,43 @@ function BasicDataTable() {
     [memoizedSelectedColumns]
   );
 
-  const handleColumnsChange = (newColumns: string[]) => {
+  const handleColumnsChange = useCallback((newColumns: string[]) => {
     setSelectedColumns(newColumns);
-  };
+  }, []);
 
-  const handleYearChange = (year: number) => {
-    setSelectedYear(year);
+  const handleYearChange = useCallback(
+    (year: number) => {
+      setSelectedYear(year);
 
-    if (co2Data) {
-      const countriesWithData = Object.keys(co2Data.data).filter((country) => {
-        const countryData = co2Data.data[country];
-        return countryData.some((dp) => dp.year === year);
-      });
-      setHighlightedCountries(new Set(countriesWithData));
-      setTimeout(() => setHighlightedCountries(new Set()), 2000);
-    }
-  };
+      if (co2Data) {
+        const countriesWithData = Object.keys(co2Data.data).filter(
+          (country) => {
+            const countryData = co2Data.data[country];
+            return countryData.some((dp) => dp.year === year);
+          }
+        );
+        setHighlightedCountries(new Set(countriesWithData));
+        setTimeout(() => setHighlightedCountries(new Set()), 2000);
+      }
+    },
+    [co2Data]
+  );
+
+  const handleRegionChange = useCallback((region: string) => {
+    setSelectedRegion(region);
+  }, []);
+
+  const handleSearchChange = useCallback((query: string) => {
+    setSearchQuery(query);
+  }, []);
+
+  const handleSortByChange = useCallback((sortBy: 'name' | 'population') => {
+    setSortBy(sortBy);
+  }, []);
+
+  const handleSortOrderChange = useCallback((order: 'asc' | 'desc') => {
+    setSortOrder(order);
+  }, []);
 
   const handleProcessedDataChange = useCallback((processedData: string[]) => {
     setProcessedCountries(processedData);
@@ -73,10 +94,10 @@ function BasicDataTable() {
         countries={countries}
         onColumnsChange={handleColumnsChange}
         onYearChange={handleYearChange}
-        onRegionChange={setSelectedRegion}
-        onSearchChange={setSearchQuery}
-        onSortByChange={setSortBy}
-        onSortOrderChange={setSortOrder}
+        onRegionChange={handleRegionChange}
+        onSearchChange={handleSearchChange}
+        onSortByChange={handleSortByChange}
+        onSortOrderChange={handleSortOrderChange}
         onProcessedDataChange={handleProcessedDataChange}
       />
 

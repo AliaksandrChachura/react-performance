@@ -1,4 +1,4 @@
-import { useMemo, useEffect } from 'react';
+import { useMemo, useEffect, useCallback } from 'react';
 import HeaderControlPanel from './HeaderControlPanel';
 import HeaderActionButtons from './HeaderActionButtons';
 import type { CO2DataPoint, CountryCO2Data } from '../../../types';
@@ -108,9 +108,12 @@ function BasicDataTableHeader({
     onProcessedDataChange(processedCountries);
   }, [processedCountries, onProcessedDataChange]);
 
-  const handleYearChange = (year: number) => {
-    onYearChange(year);
-  };
+  const handleYearChange = useCallback(
+    (year: number) => {
+      onYearChange(year);
+    },
+    [onYearChange]
+  );
 
   return (
     <div className="table-header">

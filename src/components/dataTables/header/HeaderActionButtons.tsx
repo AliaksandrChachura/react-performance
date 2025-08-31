@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import type { AppDispatch } from '../../../store';
 import { fetchCO2Data } from '../../../store/slices/countriesReducer';
@@ -16,16 +16,24 @@ function HeaderActionButtons({
   const dispatch = useDispatch<AppDispatch>();
   const [isColumnModalOpen, setIsColumnModalOpen] = useState(false);
 
-  const handleRefreshFromServer = () => {
+  const handleRefreshFromServer = useCallback(() => {
     console.log('🔄 Refreshing data from server...');
     dispatch(fetchCO2Data());
-  };
+  }, [dispatch]);
+
+  const handleOpenColumnModal = useCallback(() => {
+    setIsColumnModalOpen(true);
+  }, []);
+
+  const handleCloseColumnModal = useCallback(() => {
+    setIsColumnModalOpen(false);
+  }, []);
 
   return (
     <>
       <div className="action-buttons">
         <button
-          onClick={() => setIsColumnModalOpen(true)}
+          onClick={handleOpenColumnModal}
           className="customize-columns-btn"
         >
           ⚙️ Customize Columns
@@ -37,7 +45,7 @@ function HeaderActionButtons({
 
       <ColumnSelectorModal
         isOpen={isColumnModalOpen}
-        onClose={() => setIsColumnModalOpen(false)}
+        onClose={handleCloseColumnModal}
         onColumnsChange={onColumnsChange}
         currentColumns={selectedColumns}
       />
