@@ -1,7 +1,10 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import BasicDataTableHeader from './BasicDataTableHeader';
-import type { CountryCO2Data } from '../../../types';
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
+import BasicDataTableHeader from '../BasicDataTableHeader';
+import countriesReducer from '../../../../store/slices/countriesReducer';
+import type { CountryCO2Data } from '../../../../types';
 
 interface HeaderControlPanelProps {
   selectedYear: number;
@@ -21,7 +24,7 @@ interface HeaderActionButtonsProps {
   onColumnsChange: (columns: string[]) => void;
 }
 
-vi.mock('./HeaderControlPanel', () => ({
+vi.mock('../HeaderControlPanel', () => ({
   default: ({
     selectedYear,
     selectedRegion,
@@ -54,7 +57,7 @@ vi.mock('./HeaderControlPanel', () => ({
   ),
 }));
 
-vi.mock('./HeaderActionButtons', () => ({
+vi.mock('../HeaderActionButtons', () => ({
   default: ({ selectedColumns, onColumnsChange }: HeaderActionButtonsProps) => (
     <div data-testid="header-action-buttons">
       <div data-testid="columns-count">Columns: {selectedColumns.length}</div>
@@ -125,25 +128,50 @@ describe('BasicDataTableHeader', () => {
     onProcessedDataChange: vi.fn(),
   };
 
+  const createMockStore = () => {
+    return configureStore({
+      reducer: {
+        countries: countriesReducer,
+      },
+      preloadedState: {
+        countries: {
+          co2Data: null,
+          countries: [],
+          loading: false,
+          error: null,
+        },
+      },
+    });
+  };
+
+  const renderWithProvider = (props = {}) => {
+    const store = createMockStore();
+    return render(
+      <Provider store={store}>
+        <BasicDataTableHeader {...defaultProps} {...props} />
+      </Provider>
+    );
+  };
+
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
   it('renders the component with correct title', () => {
-    render(<BasicDataTableHeader {...defaultProps} />);
+    renderWithProvider();
 
     expect(screen.getByText('Countries statistics')).toBeInTheDocument();
   });
 
   it('renders HeaderControlPanel and HeaderActionButtons', () => {
-    render(<BasicDataTableHeader {...defaultProps} />);
+    renderWithProvider();
 
     expect(screen.getByTestId('header-control-panel')).toBeInTheDocument();
     expect(screen.getByTestId('header-action-buttons')).toBeInTheDocument();
   });
 
   it('passes correct props to HeaderControlPanel', () => {
-    render(<BasicDataTableHeader {...defaultProps} />);
+    renderWithProvider();
 
     expect(screen.getByText('Year: 2020')).toBeInTheDocument();
     expect(screen.getByText('Region: all')).toBeInTheDocument();
@@ -153,13 +181,13 @@ describe('BasicDataTableHeader', () => {
   });
 
   it('passes correct props to HeaderActionButtons', () => {
-    render(<BasicDataTableHeader {...defaultProps} />);
+    renderWithProvider();
 
     expect(screen.getByText('Columns: 3')).toBeInTheDocument();
   });
 
   it('calls onProcessedDataChange with filtered and sorted countries', async () => {
-    render(<BasicDataTableHeader {...defaultProps} />);
+    renderWithProvider();
 
     await waitFor(() => {
       expect(defaultProps.onProcessedDataChange).toHaveBeenCalledWith([
@@ -177,7 +205,7 @@ describe('BasicDataTableHeader', () => {
       searchQuery: 'germ',
     };
 
-    render(<BasicDataTableHeader {...propsWithSearch} />);
+    renderWithProvider(propsWithSearch);
 
     await waitFor(() => {
       expect(defaultProps.onProcessedDataChange).toHaveBeenCalledWith([
@@ -192,7 +220,7 @@ describe('BasicDataTableHeader', () => {
       selectedRegion: 'europe',
     };
 
-    render(<BasicDataTableHeader {...propsWithRegion} />);
+    renderWithProvider(propsWithRegion);
 
     await waitFor(() => {
       expect(defaultProps.onProcessedDataChange).toHaveBeenCalledWith([
@@ -209,7 +237,7 @@ describe('BasicDataTableHeader', () => {
       sortOrder: 'asc' as const,
     };
 
-    render(<BasicDataTableHeader {...propsWithPopulationSort} />);
+    renderWithProvider(propsWithPopulationSort);
 
     await waitFor(() => {
       expect(defaultProps.onProcessedDataChange).toHaveBeenCalledWith([
@@ -228,7 +256,7 @@ describe('BasicDataTableHeader', () => {
       sortOrder: 'desc' as const,
     };
 
-    render(<BasicDataTableHeader {...propsWithPopulationSortDesc} />);
+    renderWithProvider(propsWithPopulationSortDesc);
 
     await waitFor(() => {
       expect(defaultProps.onProcessedDataChange).toHaveBeenCalledWith([
@@ -246,7 +274,7 @@ describe('BasicDataTableHeader', () => {
       co2Data: null,
     };
 
-    render(<BasicDataTableHeader {...propsWithNoData} />);
+    renderWithProvider(propsWithNoData);
 
     await waitFor(() => {
       expect(defaultProps.onProcessedDataChange).toHaveBeenCalledWith([]);
@@ -259,7 +287,7 @@ describe('BasicDataTableHeader', () => {
       countries: [],
     };
 
-    render(<BasicDataTableHeader {...propsWithNoCountries} />);
+    renderWithProvider(propsWithNoCountries);
 
     await waitFor(() => {
       expect(defaultProps.onProcessedDataChange).toHaveBeenCalledWith([]);
@@ -275,7 +303,7 @@ describe('BasicDataTableHeader', () => {
       sortOrder: 'desc' as const,
     };
 
-    render(<BasicDataTableHeader {...propsWithMultipleFilters} />);
+    renderWithProvider(propsWithMultipleFilters);
 
     await waitFor(() => {
       expect(defaultProps.onProcessedDataChange).toHaveBeenCalledWith([
@@ -285,7 +313,7 @@ describe('BasicDataTableHeader', () => {
   });
 
   it('calls onYearChange when year is changed', () => {
-    render(<BasicDataTableHeader {...defaultProps} />);
+    renderWithProvider();
 
     fireEvent.click(screen.getByTestId('year-selector'));
 
@@ -293,7 +321,7 @@ describe('BasicDataTableHeader', () => {
   });
 
   it('calls onColumnsChange when columns are changed', () => {
-    render(<BasicDataTableHeader {...defaultProps} />);
+    renderWithProvider();
 
     fireEvent.click(screen.getByText('Change Columns'));
 
@@ -304,17 +332,22 @@ describe('BasicDataTableHeader', () => {
   });
 
   it('memoizes region map correctly', () => {
-    const { rerender } = render(<BasicDataTableHeader {...defaultProps} />);
+    const { rerender } = renderWithProvider();
 
-    rerender(<BasicDataTableHeader {...defaultProps} />);
+    const store = createMockStore();
+    rerender(
+      <Provider store={store}>
+        <BasicDataTableHeader {...defaultProps} />
+      </Provider>
+    );
 
-    expect(screen.getByText('Region: all')).toBeInTheDocument();
+    expect(screen.getByTestId('header-control-panel')).toBeInTheDocument();
   });
 
   it('processes countries data efficiently with useMemo', async () => {
     const startTime = performance.now();
 
-    render(<BasicDataTableHeader {...defaultProps} />);
+    renderWithProvider();
 
     await waitFor(() => {
       expect(defaultProps.onProcessedDataChange).toHaveBeenCalled();

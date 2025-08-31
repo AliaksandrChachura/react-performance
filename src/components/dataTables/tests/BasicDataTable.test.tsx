@@ -2,8 +2,8 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
-import BasicDataTable from './BasicDataTable';
-import countriesReducer from '../../store/slices/countriesReducer';
+import BasicDataTable from '../BasicDataTable';
+import countriesReducer from '../../../store/slices/countriesReducer';
 
 interface AsyncCountriesTableProps {
   selectedColumns: string[];
@@ -28,7 +28,7 @@ interface BasicDataTableHeaderProps {
   onProcessedDataChange: (processedCountries: string[]) => void;
 }
 
-vi.mock('./AsyncCountriesTable', () => ({
+vi.mock('../AsyncCountriesTable', () => ({
   default: ({
     selectedColumns,
     selectedYear,
@@ -46,7 +46,7 @@ vi.mock('./AsyncCountriesTable', () => ({
   ),
 }));
 
-vi.mock('./header/BasicDataTableHeader', () => ({
+vi.mock('../header/BasicDataTableHeader', () => ({
   default: ({
     selectedColumns,
     selectedYear,
@@ -109,15 +109,57 @@ vi.mock('../../helpers', () => ({
       defaultVisible: true,
     },
     {
+      key: 'isoCode',
+      label: 'ISO Code',
+      description: 'Country ISO code',
+      defaultVisible: true,
+    },
+    {
       key: 'population',
       label: 'Population',
       description: 'Country population count',
-      defaultVisible: false,
+      defaultVisible: true,
     },
     {
       key: 'emissions',
-      label: 'CO2 Emissions',
-      description: 'Total CO2 emissions',
+      label: 'CO2 Emissions (kt)',
+      description: 'Total CO2 emissions in kilotons',
+      defaultVisible: true,
+    },
+    {
+      key: 'per_capita',
+      label: 'CO2 per Capita',
+      description: 'CO2 emissions per person',
+      defaultVisible: true,
+    },
+    {
+      key: 'oil_co2',
+      label: 'Oil CO2 (kt)',
+      description: 'CO2 emissions from oil consumption in kilotons',
+      defaultVisible: false,
+    },
+    {
+      key: 'methane',
+      label: 'Methane (kt)',
+      description: 'Methane emissions in kilotons',
+      defaultVisible: false,
+    },
+    {
+      key: 'temperature_change_from_co2',
+      label: 'Temperature Change (°C)',
+      description: 'Temperature change from CO2 emissions',
+      defaultVisible: false,
+    },
+    {
+      key: 'gdp',
+      label: 'GDP',
+      description: 'Gross Domestic Product in USD',
+      defaultVisible: false,
+    },
+    {
+      key: 'source',
+      label: 'Data Source',
+      description: 'Source of the data',
       defaultVisible: false,
     },
   ],
@@ -203,7 +245,7 @@ describe('BasicDataTable', () => {
   it('initializes with default column selection', () => {
     renderWithProvider();
 
-    expect(screen.getByText('Columns: 2')).toBeInTheDocument();
+    expect(screen.getByText('Columns: 6')).toBeInTheDocument();
     expect(screen.getByTestId('year-display')).toHaveTextContent('Year: 2020');
     expect(screen.getByTestId('region-display')).toHaveTextContent(
       'Region: all'
@@ -297,7 +339,7 @@ describe('BasicDataTable', () => {
       </Provider>
     );
 
-    expect(screen.getByText('Columns: 2')).toBeInTheDocument();
+    expect(screen.getByText('Columns: 6')).toBeInTheDocument();
   });
 
   it('shows loading fallback in Suspense boundary', () => {
@@ -313,7 +355,7 @@ describe('BasicDataTable', () => {
       countries: [],
     });
 
-    expect(screen.getByText('Columns: 2')).toBeInTheDocument();
+    expect(screen.getByText('Columns: 6')).toBeInTheDocument();
     expect(screen.getByTestId('year-display')).toHaveTextContent('Year: 2020');
     expect(screen.getByTestId('region-display')).toHaveTextContent(
       'Region: all'
@@ -326,7 +368,7 @@ describe('BasicDataTable', () => {
     const asyncTable = screen.getByTestId('async-countries-table');
     expect(asyncTable).toBeInTheDocument();
 
-    expect(screen.getByText('Selected Columns: 2')).toBeInTheDocument();
+    expect(screen.getByText('Selected Columns: 6')).toBeInTheDocument();
     expect(screen.getByTestId('year-display')).toHaveTextContent('Year: 2020');
     expect(screen.getByText('Highlighted: 0')).toBeInTheDocument();
     expect(screen.getByText('Processed: 0')).toBeInTheDocument();
