@@ -32,12 +32,24 @@ export default async function baseFetch(
     clear();
 
     if (!response.ok) {
+      const contentType = response.headers.get('content-type');
+      if (contentType && contentType.includes('text/html')) {
+        throw new Error(`Received HTML instead of JSON. URL: ${url}`);
+      }
+
       const data = await response.json().catch(() => ({}));
       const message = data?.errorDescription || response.statusText;
       throw new Error(message);
     }
 
-    return response.json();
+    const contentType = response.headers.get('content-type');
+    if (contentType && contentType.includes('application/json')) {
+      return response.json();
+    } else {
+      throw new Error(
+        `Expected JSON but received ${contentType || 'unknown content type'}`
+      );
+    }
   } catch (error: unknown) {
     clear();
 

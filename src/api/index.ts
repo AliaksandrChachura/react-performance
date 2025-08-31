@@ -1,5 +1,6 @@
 import baseFetch from './baseFetch';
-const DEFAULT_BASE_URL = import.meta.env.VITE_COUNTRIES_BASE_URL || '/co2-data';
+const DEFAULT_BASE_URL =
+  import.meta.env.VITE_COUNTRIES_BASE_URL || '/co2-data.json';
 const EXTERNAL_API_URL =
   'https://nyc3.digitaloceanspaces.com/owid-public/data/co2/owid-co2-data.json';
 
