@@ -1,34 +1,29 @@
-import { useState } from 'react';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
-import './App.css';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import type { AppDispatch, RootState } from './store';
+import { fetchCO2Data } from './store/slices/countriesReducer';
+import BasicDataTable from './components/dataTables/BasicDataTable';
+import Loading from './Loading/Loading';
+import { Suspense } from 'react';
 
 function App() {
-  const [count, setCount] = useState(0);
+  const dispatch = useDispatch<AppDispatch>();
+  const { error } = useSelector((state: RootState) => state.countries);
+
+  useEffect(() => {
+    dispatch(fetchCO2Data());
+  }, [dispatch]);
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank" rel="noreferrer">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank" rel="noreferrer">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <Suspense fallback={<Loading />}>
+      <div className="App">
+        <BasicDataTable />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    </Suspense>
   );
 }
 

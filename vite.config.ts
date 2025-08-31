@@ -3,6 +3,16 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
+  server: {
+    proxy: {
+      '/co2-data': {
+        target:
+          'https://nyc3.digitaloceanspaces.com/owid-public/data/co2/owid-co2-data.json',
+        changeOrigin: true,
+        secure: true,
+      },
+    },
+  },
   test: {
     globals: true,
     environment: 'jsdom',
