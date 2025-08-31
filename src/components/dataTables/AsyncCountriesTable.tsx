@@ -7,23 +7,15 @@ import YearlyDataTable from './YearlyDataTable';
 function AsyncCountriesTable({
   selectedColumns,
   selectedYear,
-  selectedRegion,
-  searchQuery,
-  sortBy,
-  sortOrder,
   highlightedCountries,
+  processedCountries,
 }: {
   selectedColumns: string[];
   selectedYear: number;
-  selectedRegion: string;
-  searchQuery: string;
-  sortBy: 'name' | 'population';
-  sortOrder: 'asc' | 'desc';
   highlightedCountries: Set<string>;
+  processedCountries: string[];
 }) {
-  const { countries, co2Data } = useSelector(
-    (state: RootState) => state.countries
-  );
+  const { co2Data } = useSelector((state: RootState) => state.countries);
   const [expandedCountries, setExpandedCountries] = useState<Set<string>>(
     new Set()
   );
@@ -45,52 +37,7 @@ function AsyncCountriesTable({
   };
 
   const renderCountries = () => {
-    const filteredCountries = countries.filter((country) => {
-      const countryData = co2Data?.data[country];
-      if (!countryData || countryData.length === 0) return false;
-
-      if (
-        searchQuery &&
-        !country.toLowerCase().includes(searchQuery.toLowerCase())
-      ) {
-        return false;
-      }
-
-      if (selectedRegion !== 'all') {
-        const regionMap: Record<string, string[]> = {
-          europe: ['Germany', 'France', 'Italy', 'Spain', 'United Kingdom'],
-          asia: ['China', 'India', 'Japan', 'South Korea'],
-          africa: ['South Africa', 'Nigeria', 'Egypt'],
-          americas: ['United States', 'Canada', 'Brazil', 'Mexico'],
-          oceania: ['Australia', 'New Zealand'],
-        };
-        if (!regionMap[selectedRegion]?.includes(country)) return false;
-      }
-
-      return true;
-    });
-
-    filteredCountries.sort((a, b) => {
-      const countryDataA = co2Data?.data[a];
-      const countryDataB = co2Data?.data[b];
-
-      if (!countryDataA || !countryDataB) return 0;
-
-      const dataA =
-        countryDataA.find((dp) => dp.year === selectedYear) || countryDataA[0];
-      const dataB =
-        countryDataB.find((dp) => dp.year === selectedYear) || countryDataB[0];
-
-      if (sortBy === 'population') {
-        const popA = dataA.population || 0;
-        const popB = dataB.population || 0;
-        return sortOrder === 'asc' ? popA - popB : popB - popA;
-      } else {
-        return sortOrder === 'asc' ? a.localeCompare(b) : b.localeCompare(a);
-      }
-    });
-
-    return filteredCountries.map((country) => {
+    return processedCountries.map((country) => {
       const countryData = co2Data?.data[country];
       const isExpanded = expandedCountries.has(country);
       const isHighlighted = highlightedCountries.has(country);

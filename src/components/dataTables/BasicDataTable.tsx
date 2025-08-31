@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../store';
-import { Suspense, useState } from 'react';
+import { Suspense, useState, useMemo, useCallback } from 'react';
 import Loading from '../../Loading/Loading';
 import { AVAILABLE_COLUMNS } from '../../helpers';
 import AsyncCountriesTable from './AsyncCountriesTable';
@@ -19,7 +19,25 @@ function BasicDataTable() {
   const [highlightedCountries, setHighlightedCountries] = useState<Set<string>>(
     new Set()
   );
-  const { co2Data } = useSelector((state: RootState) => state.countries);
+  const [processedCountries, setProcessedCountries] = useState<string[]>([]);
+
+  const { co2Data, countries } = useSelector(
+    (state: RootState) => state.countries
+  );
+
+  const memoizedSelectedColumns = useMemo(
+    () => selectedColumns,
+    [selectedColumns]
+  );
+
+  const headerColumns = useMemo(
+    () =>
+      memoizedSelectedColumns.map((columnKey) => {
+        const column = AVAILABLE_COLUMNS.find((col) => col.key === columnKey);
+        return { key: columnKey, label: column?.label || columnKey };
+      }),
+    [memoizedSelectedColumns]
+  );
 
   const handleColumnsChange = (newColumns: string[]) => {
     setSelectedColumns(newColumns);
@@ -27,7 +45,7 @@ function BasicDataTable() {
 
   const handleYearChange = (year: number) => {
     setSelectedYear(year);
-    // Highlight countries that have data for this year
+
     if (co2Data) {
       const countriesWithData = Object.keys(co2Data.data).filter((country) => {
         const countryData = co2Data.data[country];
@@ -38,32 +56,36 @@ function BasicDataTable() {
     }
   };
 
+  const handleProcessedDataChange = useCallback((processedData: string[]) => {
+    setProcessedCountries(processedData);
+  }, []);
+
   return (
     <div className="basic-data-table-container">
       <BasicDataTableHeader
-        selectedColumns={selectedColumns}
+        selectedColumns={memoizedSelectedColumns}
         selectedYear={selectedYear}
         selectedRegion={selectedRegion}
         searchQuery={searchQuery}
         sortBy={sortBy}
         sortOrder={sortOrder}
+        co2Data={co2Data}
+        countries={countries}
         onColumnsChange={handleColumnsChange}
         onYearChange={handleYearChange}
         onRegionChange={setSelectedRegion}
         onSearchChange={setSearchQuery}
         onSortByChange={setSortBy}
         onSortOrderChange={setSortOrder}
+        onProcessedDataChange={handleProcessedDataChange}
       />
 
       <table className="basic-data-table">
         <thead className="basic-data-table-header">
           <tr>
-            {selectedColumns.map((columnKey) => {
-              const column = AVAILABLE_COLUMNS.find(
-                (col) => col.key === columnKey
-              );
-              return <th key={columnKey}>{column?.label || columnKey}</th>;
-            })}
+            {headerColumns.map((column) => (
+              <th key={column.key}>{column.label}</th>
+            ))}
           </tr>
         </thead>
 
@@ -72,7 +94,7 @@ function BasicDataTable() {
             <tbody className="basic-data-table-body">
               <tr>
                 <td
-                  colSpan={selectedColumns.length}
+                  colSpan={memoizedSelectedColumns.length}
                   style={{ textAlign: 'center', padding: '50px' }}
                 >
                   <Loading />
@@ -82,13 +104,10 @@ function BasicDataTable() {
           }
         >
           <AsyncCountriesTable
-            selectedColumns={selectedColumns}
+            selectedColumns={memoizedSelectedColumns}
             selectedYear={selectedYear}
-            selectedRegion={selectedRegion}
-            searchQuery={searchQuery}
-            sortBy={sortBy}
-            sortOrder={sortOrder}
             highlightedCountries={highlightedCountries}
+            processedCountries={processedCountries}
           />
         </Suspense>
       </table>
