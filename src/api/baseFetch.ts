@@ -32,7 +32,7 @@ export default async function baseFetch(
     clear();
 
     if (!response.ok) {
-      const contentType = response.headers.get('content-type');
+      const contentType = response.headers?.get('content-type');
       if (contentType && contentType.includes('text/html')) {
         throw new Error(`Received HTML instead of JSON. URL: ${url}`);
       }
@@ -42,7 +42,7 @@ export default async function baseFetch(
       throw new Error(message);
     }
 
-    const contentType = response.headers.get('content-type');
+    const contentType = response.headers?.get('content-type');
     if (contentType && contentType.includes('application/json')) {
       return response.json();
     } else {
