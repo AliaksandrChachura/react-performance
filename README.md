@@ -1,69 +1,31 @@
-# React + TypeScript + Vite
+# React Performance Optimization
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+RSSchool course React 2025 Q3
 
-Currently, two official plugins are available:
+## Before Optimization
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+![Before Optimization - Sorted Countries](./screenshots/before-sorted-countries.png)
+_Performance issues when sorting countries_
 
-## Expanding the ESLint configuration
+![Before Optimization - Add Columns](./screenshots/before-add-columns.png)
+_Re-rendering issues when adding columns_
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+![Before Optimization - Year Change](./screenshots/before-year-change.png)
+_Expensive calculations on year change_
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+![Before Optimization - Country Select](./screenshots/before-country-select.png)
+_Unnecessary re-renders during country selection_
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+## After Optimization
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
-```
+![After Optimization - Sorted Countries](./screenshots/after-sorted-countries.png)
+_Improved performance when sorting countries_
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+![After Optimization - Add Columns](./screenshots/after-add-columns.png)
+_Optimized re-rendering when adding columns_
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x';
-import reactDom from 'eslint-plugin-react-dom';
+![After Optimization - Year Change](./screenshots/after-year-change.png)
+_Optimized calculations on year change_
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
-```
+![After Optimization - Country Select](./screenshots/after-country-select.png)
+_Reduced re-renders during country selection_
