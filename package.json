@@ -11,7 +11,7 @@
     "format": "prettier --write .",
     "prepare": "husky install",
     "test": "vitest",
-    "test:coverage": "vitest run --coverage",
+    "coverage": "vitest run --coverage",
     "test:check": "vitest run --reporter=verbose || echo 'No tests found'"
   },
   "lint-staged": {
