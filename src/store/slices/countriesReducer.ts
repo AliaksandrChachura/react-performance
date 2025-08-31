@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { apiFetchCO2Data } from '../../api/index';
-import type { CO2DataResponse } from '../../types/co2';
+import type { CO2DataResponse } from '../../types';
 
 export const fetchCO2Data = createAsyncThunk(
   'countries/fetchCO2Data',

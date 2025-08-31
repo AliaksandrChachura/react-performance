@@ -6,10 +6,14 @@ export default defineConfig({
   server: {
     proxy: {
       '/co2-data': {
-        target:
-          'https://nyc3.digitaloceanspaces.com/owid-public/data/co2/owid-co2-data.json',
+        target: 'https://nyc3.digitaloceanspaces.com',
         changeOrigin: true,
         secure: true,
+        rewrite: (path) =>
+          path.replace(
+            /^\/co2-data/,
+            '/owid-public/data/co2/owid-co2-data.json'
+          ),
       },
     },
   },

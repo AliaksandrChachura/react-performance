@@ -8,7 +8,7 @@ import type {
   CountryCO2Data,
   CO2DataResponse,
   CountrySummary,
-} from '../types/co2.js';
+} from '../types/index.js';
 
 const dataCache = new Map<string, CO2DataResponse>();
 const CACHE_KEY = 'co2Data';
@@ -237,19 +237,27 @@ function transformExternalData(rawData: unknown): CountryCO2Data {
               (point: unknown) => {
                 const pointObj = point as Record<string, unknown>;
                 return {
-                  year:
-                    (pointObj.year as number) ||
-                    (pointObj.date as number) ||
-                    new Date().getFullYear(),
+                  year: (pointObj.year as number) || new Date().getFullYear(),
                   emissions:
-                    (pointObj.value as number) ||
-                    (pointObj.emissions as number) ||
                     (pointObj.co2 as number) ||
+                    (pointObj.cement_co2 as number) ||
+                    (pointObj.gas_co2 as number) ||
+                    (pointObj.coal_co2 as number) ||
                     0,
+                  oil_co2: pointObj.oil_co2 as number | undefined,
+                  methane: pointObj.methane as number | undefined,
+                  temperature_change_from_co2:
+                    pointObj.temperature_change_from_co2 as number | undefined,
                   population: pointObj.population as number | undefined,
                   gdp: pointObj.gdp as number | undefined,
-                  per_capita: pointObj.per_capita as number | undefined,
-                  source: pointObj.source as string | undefined,
+                  per_capita:
+                    (pointObj.co2_per_capita as number) ||
+                    (pointObj.cement_co2_per_capita as number) ||
+                    (pointObj.oil_co2_per_capita as number) ||
+                    (pointObj.gas_co2_per_capita as number) ||
+                    (pointObj.coal_co2_per_capita as number) ||
+                    undefined,
+                  source: 'Our World in Data' as string | undefined,
                   isoCode: countryIsoCode,
                 };
               }

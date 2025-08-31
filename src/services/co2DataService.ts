@@ -3,7 +3,7 @@ import type {
   CountryCO2Data,
   CO2DataResponse,
   CountrySummary,
-} from '../types/co2.js';
+} from '../types/index.js';
 
 class CO2DataService {
   private dataCache: Map<string, unknown> = new Map();

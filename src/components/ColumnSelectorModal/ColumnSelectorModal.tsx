@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import './ColumnSelectorModal.scss';
+import { AVAILABLE_COLUMNS } from '../../helpers';
 
 export interface ColumnOption {
   key: string;
@@ -14,70 +15,6 @@ interface ColumnSelectorModalProps {
   onColumnsChange: (selectedColumns: string[]) => void;
   currentColumns: string[];
 }
-
-const AVAILABLE_COLUMNS: ColumnOption[] = [
-  {
-    key: 'year',
-    label: 'Year',
-    description: 'Data collection year',
-    defaultVisible: true,
-  },
-  {
-    key: 'isoCode',
-    label: 'ISO Code',
-    description: 'Country ISO code',
-    defaultVisible: true,
-  },
-  {
-    key: 'population',
-    label: 'Population',
-    description: 'Country population count',
-    defaultVisible: true,
-  },
-  {
-    key: 'emissions',
-    label: 'CO2 Emissions (kt)',
-    description: 'Total CO2 emissions in kilotons',
-    defaultVisible: true,
-  },
-  {
-    key: 'per_capita',
-    label: 'CO2 per Capita',
-    description: 'CO2 emissions per person',
-    defaultVisible: true,
-  },
-  {
-    key: 'gdp',
-    label: 'GDP',
-    description: 'Gross Domestic Product',
-    defaultVisible: false,
-  },
-  {
-    key: 'source',
-    label: 'Data Source',
-    description: 'Source of the data',
-    defaultVisible: false,
-  },
-
-  {
-    key: 'methane',
-    label: 'Methane Emissions',
-    description: 'Methane emissions data',
-    defaultVisible: false,
-  },
-  {
-    key: 'oil_co2',
-    label: 'Oil CO2',
-    description: 'CO2 from oil consumption',
-    defaultVisible: false,
-  },
-  {
-    key: 'temperature_change_from_co2',
-    label: 'Temperature Change',
-    description: 'Temperature change from CO2',
-    defaultVisible: false,
-  },
-];
 
 export function ColumnSelectorModal({
   isOpen,

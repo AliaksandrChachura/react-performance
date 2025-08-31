@@ -4,7 +4,7 @@ import type {
   CO2DataResponse,
   CountrySummary,
   CO2DataPoint,
-} from '../types/co2.js';
+} from '../types/index.js';
 
 interface UseCO2DataReturn {
   data: CO2DataResponse | null;
