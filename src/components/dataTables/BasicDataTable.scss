@@ -1,0 +1,224 @@
+.basic-data-table-container {
+  padding: 20px;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.table-header {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 20px;
+
+  .basic-data-table-title {
+    margin: 0;
+    font-size: 1.875rem;
+    font-weight: 600;
+    color: #111827;
+    text-align: center;
+  }
+
+  .control-panel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 16px;
+    background-color: #f8fafc;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 120px;
+
+      label {
+        font-size: 0.75rem;
+        font-weight: 500;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .control-select,
+      .control-input {
+        padding: 8px 12px;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        font-size: 0.875rem;
+        background-color: white;
+        color: #374151;
+
+        &:focus {
+          outline: none;
+          border-color: #3b82f6;
+          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+      }
+
+      .sort-order-btn {
+        padding: 8px 12px;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        background-color: white;
+        color: #374151;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: bold;
+
+        &:hover {
+          background-color: #f3f4f6;
+        }
+      }
+    }
+  }
+
+  .action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .column-selector-button {
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    &:hover {
+      background-color: #2563eb;
+      transform: translateY(-1px);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+}
+
+.basic-data-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow:
+    0 1px 3px 0 rgba(0, 0, 0, 0.1),
+    0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.basic-data-table-header {
+  background-color: #f9fafb;
+  border-bottom: 2px solid #e5e7eb;
+
+  th {
+    padding: 16px 12px;
+    text-align: left;
+    font-weight: 600;
+    color: #374151;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-right: 1px solid #e5e7eb;
+
+    &:last-child {
+      border-right: none;
+    }
+  }
+}
+
+.basic-data-table-body {
+  tr {
+    border-bottom: 1px solid #f3f4f6;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: #f9fafb;
+    }
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  td {
+    padding: 12px;
+    border-right: 1px solid #f3f4f6;
+    color: #374151;
+    font-size: 0.875rem;
+
+    &:last-child {
+      border-right: none;
+    }
+  }
+}
+
+.country-row {
+  background-color: #ffffff;
+  font-weight: 500;
+
+  &:hover {
+    background-color: #f3f4f6 !important;
+  }
+
+  &.highlighted {
+    background-color: #fef3c7 !important;
+    animation: highlight-pulse 2s ease-in-out;
+  }
+
+  .country-row-cell {
+    font-weight: 600;
+    color: #111827;
+  }
+}
+
+@keyframes highlight-pulse {
+  0%,
+  100% {
+    background-color: #fef3c7;
+  }
+  50% {
+    background-color: #fde68a;
+  }
+}
+
+.yearly-data-row {
+  background-color: #f8f9fa !important;
+  font-size: 0.8rem;
+
+  &:hover {
+    background-color: #f1f5f9 !important;
+  }
+
+  td {
+    color: #6b7280;
+  }
+}
+
+@media (max-width: 768px) {
+  .table-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .basic-data-table {
+    font-size: 0.75rem;
+  }
+
+  .basic-data-table-header th,
+  .basic-data-table-body td {
+    padding: 8px 6px;
+  }
+}

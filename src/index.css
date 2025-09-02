@@ -1,0 +1,8 @@
+@import './Loading/Loading.scss';
+@import './components/dataTables/BasicDataTable.scss';
+@import './App.scss';
+
+:root {
+  display: flex;
+  flex-direction: column;
+}

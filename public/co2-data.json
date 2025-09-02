@@ -1,0 +1,132 @@
+{
+  "United States": [
+    {
+      "year": 1990,
+      "emissions": 5000.5,
+      "population": 248709873,
+      "per_capita": 20.1
+    },
+    {
+      "year": 2000,
+      "emissions": 5800.2,
+      "population": 281421906,
+      "per_capita": 20.6
+    },
+    {
+      "year": 2010,
+      "emissions": 5400.8,
+      "population": 308745538,
+      "per_capita": 17.5
+    },
+    {
+      "year": 2020,
+      "emissions": 4800.3,
+      "population": 331002651,
+      "per_capita": 14.5
+    }
+  ],
+  "China": [
+    {
+      "year": 1990,
+      "emissions": 2200.0,
+      "population": 1176880000,
+      "per_capita": 1.9
+    },
+    {
+      "year": 2000,
+      "emissions": 3200.0,
+      "population": 1267430000,
+      "per_capita": 2.5
+    },
+    {
+      "year": 2010,
+      "emissions": 8200.0,
+      "population": 1339720000,
+      "per_capita": 6.1
+    },
+    {
+      "year": 2020,
+      "emissions": 10300.0,
+      "population": 1400050000,
+      "per_capita": 7.4
+    }
+  ],
+  "Germany": [
+    {
+      "year": 1990,
+      "emissions": 1200.0,
+      "population": 79433000,
+      "per_capita": 15.1
+    },
+    {
+      "year": 2000,
+      "emissions": 900.0,
+      "population": 82000000,
+      "per_capita": 11.0
+    },
+    {
+      "year": 2010,
+      "emissions": 800.0,
+      "population": 81777000,
+      "per_capita": 9.8
+    },
+    {
+      "year": 2020,
+      "emissions": 650.0,
+      "population": 83190556,
+      "per_capita": 7.8
+    }
+  ],
+  "India": [
+    {
+      "year": 1990,
+      "emissions": 600.0,
+      "population": 873277798,
+      "per_capita": 0.7
+    },
+    {
+      "year": 2000,
+      "emissions": 1000.0,
+      "population": 1056575549,
+      "per_capita": 0.9
+    },
+    {
+      "year": 2010,
+      "emissions": 1800.0,
+      "population": 1234281170,
+      "per_capita": 1.5
+    },
+    {
+      "year": 2020,
+      "emissions": 2500.0,
+      "population": 1380004385,
+      "per_capita": 1.8
+    }
+  ],
+  "Japan": [
+    {
+      "year": 1990,
+      "emissions": 1100.0,
+      "population": 123537000,
+      "per_capita": 8.9
+    },
+    {
+      "year": 2000,
+      "emissions": 1200.0,
+      "population": 126714000,
+      "per_capita": 9.5
+    },
+    {
+      "year": 2010,
+      "emissions": 1100.0,
+      "population": 128057000,
+      "per_capita": 8.6
+    },
+    {
+      "year": 2020,
+      "emissions": 1000.0,
+      "population": 125836021,
+      "per_capita": 7.9
+    }
+  ]
+}
